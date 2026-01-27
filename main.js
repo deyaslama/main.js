@@ -1,6 +1,16 @@
+// ==UserScript==
+// @name         ملف العروض كامل 2026 (مع حماية ON/OFF)
+// @namespace    http://tampermonkey.net/
+// @version      1.8
+// @description  عرض البطاقات فقط عند ON، وإظهار رسالة عند OFF
+// @match        *://*/*
+// @grant        none
+// ==/UserScript==
+
 (function () {
     'use strict';
 
+    // زر العرض
     const exportBtn = document.createElement('button');
     exportBtn.textContent = '📄 عرض البطاقات في صفحة جديدة';
     Object.assign(exportBtn.style, {
@@ -19,6 +29,14 @@
     document.body.appendChild(exportBtn);
 
     exportBtn.addEventListener('click', () => {
+
+        // 1️⃣ تحقق من حالة السكربت
+        if (window.__SCRIPT_STATUS__ !== "ON") {
+            alert("⛔ برنامج بطاقات العروض غير متاح حاليًا");
+            return;
+        }
+
+        // 2️⃣ الباقي كما هو
         const expiryDate = prompt('📅 الرجاء إدخال تاريخ انتهاء العرض (مثال: 2025-07-31):');
         if (!expiryDate) {
             alert('⚠️ لم يتم إدخال تاريخ. تم إلغاء العملية.');
@@ -142,21 +160,17 @@
                     <span>ينتهي فى ${item.expiryDate}</span><span>كود: ${item.code}</span>
                 </div>
                 <div style="color:red; font-size: 14px;">خصم ${percent}%</div>
-            </div>
-            `;
+            </div>`;
         });
 
         const html = `
         <html>
         <head><meta charset="UTF-8"><title>بطاقات العرض</title>${style}</head>
         <body>${cardsHTML}</body>
-        </html>
-        `;
+        </html>`;
 
         newWindow.document.write(html);
         newWindow.document.close();
     });
+
 })();
-
-
-
