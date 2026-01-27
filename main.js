@@ -19,6 +19,14 @@
     document.body.appendChild(exportBtn);
 
     exportBtn.addEventListener('click', () => {
+
+    if (window.__SCRIPT_STATUS__ !== "ON") {
+        alert("⛔ برنامج بطاقات العروض غير متاح حاليًا");
+        return;
+    }
+
+    // باقي الكود كما هو
+
         const expiryDate = prompt('📅 الرجاء إدخال تاريخ انتهاء العرض (مثال: 2025-07-31):');
         if (!expiryDate) {
             alert('⚠️ لم يتم إدخال تاريخ. تم إلغاء العملية.');
